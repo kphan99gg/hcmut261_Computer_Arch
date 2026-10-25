@@ -1,0 +1,48 @@
+\documentclass[a4paper]{report}
+
+% Load style file chuẩn Khoa ĐĐT
+\usepackage{hcmut_dee}
+
+\begin{document}
+
+% ==============================================================================
+% PHẦN TRANG SƠ BỘ (Mục lục, Lời cảm ơn, Tóm tắt - Đánh số La Mã: i, ii, iii)
+% ==============================================================================
+\pagestyle{preliminary}
+\pagenumbering{roman}
+
+% Trang bìa
+\input{chapters/00_cover.tex}
+
+% Lời cảm ơn, Tóm tắt luận văn
+%\input{chapters/00_preface.tex}
+
+% Tạo Mục lục và Danh sách tự động
+\tableofcontents
+\newpage
+\listoffigures
+\newpage
+\listoftables
+\newpage
+
+% ==============================================================================
+% PHẦN NỘI DUNG CHÍNH (Đánh số Ả Rập: 1, 2, 3...)
+% ==============================================================================
+\pagestyle{mainstyle}
+\pagenumbering{arabic}
+
+% Include các chương nội dung chính trong folder chapters/
+\include{chapters/01_milestone_1}
+\include{chapters/02_milestone_2}
+
+% ==============================================================================
+% TÀI LIỆU THAM KHẢO & PHỤ LỤC
+% ==============================================================================
+\newpage
+\bibliographystyle{IEEEtran}
+\bibliography{references}
+
+% Import phụ lục (nếu có)
+%\include{chapters/07_appendix}
+
+\end{document}

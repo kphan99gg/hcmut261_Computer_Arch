@@ -1,0 +1,84 @@
+% ==============================================================================
+% TRANG BÌA CHUẨN KHOA ĐIỆN - ĐIỆN TỬ (CÓ KHUNG VIỀN ĐÔI CHUẨN MẪU)
+% Trường Đại Học Bách Khoa, TP.HCM
+% ==============================================================================
+
+\begin{titlepage}
+
+% ------------------------------------------------------------------------------
+% 1. VẼ KHUNG VIỀN ĐÔI (DOUBLE BORDER)
+% Lề trái 40mm, Lề phải 25mm, Trên 40mm, Dưới 25mm
+% ------------------------------------------------------------------------------
+\begin{tikzpicture}[remember picture, overlay]
+    % Khung ngoài (Nét đậm)
+    \draw[line width=1.5pt] 
+        ($(current page.north west) + (2.5cm,-2.2cm)$) 
+        rectangle 
+        ($(current page.south east) + (-2.5cm,2.2cm)$);
+
+    % Khung trong (Nét mảnh)
+    \draw[line width=0.5pt] 
+        ($(current page.north west) + (2.6cm,-2.3cm)$) 
+        rectangle 
+        ($(current page.south east) + (-2.6cm,2.3cm)$);
+\end{tikzpicture}
+
+\centering
+
+% Đẩy toàn bộ nội dung lên gần mép khung viền trên
+%\vspace*{-2.5cm}
+
+% ------------------------------------------------------------------------------
+% 2. NỘI DUNG TÊN TRƯỜNG / KHOA / BỘ MÔN
+% ------------------------------------------------------------------------------
+{\fontsize{14pt}{12pt}\selectfont \bfseries ĐẠI HỌC QUỐC GIA TP. HỒ CHÍ MINH \par}
+{\fontsize{14pt}{12pt}\selectfont TRƯỜNG ĐẠI HỌC BÁCH KHOA \par}
+{\fontsize{14pt}{12pt}\selectfont KHOA ĐIỆN -- ĐIỆN TỬ \par}
+{\fontsize{14pt}{12pt}\selectfont \bfseries BỘ MÔN ĐIỆN TỬ \par}
+{\fontsize{11pt}{12pt}\selectfont ------------------o0o------------------ \par}
+
+\vspace{0.4cm}
+
+% ------------------------------------------------------------------------------
+% 3. LOGO TRƯỜNG ĐẠI HỌC BÁCH KHOA (SÁT BÊN DƯỚI DÒNG PhÂN CÁCH)
+% ------------------------------------------------------------------------------
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=3.8cm, height=3.8cm, keepaspectratio]{images/hcmut_official_logo.png}
+\end{figure}
+
+\vspace{1.2cm}
+
+% ------------------------------------------------------------------------------
+% 4. LOẠI BÁO CÁO VÀ TÊN ĐỀ TÀI
+% ------------------------------------------------------------------------------
+{\fontsize{14pt}{\baselineskip}\selectfont \bfseries TIỂU LUẬN MÔN HỌC \par}
+\vspace{1.0cm}
+
+% Tên đề tài (Font 16pt, in đậm, viết hoa)
+{\fontsize{20pt}{\baselineskip}\selectfont \bfseries KIẾN TRÚC MÁY TÍNH NÂNG CAO \par}
+
+\vfill
+
+% ------------------------------------------------------------------------------
+% 5. THÔNG TIN SVTH / MSSV / GVHD (ĐẶT Ở GÓC DƯỚI BÊN PHẢI THEO MẪU KHOA)
+% ------------------------------------------------------------------------------
+\begin{raggedleft}
+\begin{minipage}{0.5\textwidth}
+    \fontsize{14pt}{\baselineskip}\selectfont
+    \begin{tabular}{ll}
+        \textbf{GVHD:} & PGS. TS. TRẦN HOÀNG LINH \\
+        \textbf{HVTH 1:} & LÊ QUỐC CƯỜNG - 2570001\\
+        \textbf{HVTH 2:} & PHAN HUY KHÁNH - 2570434 \\
+    \end{tabular}
+\end{minipage}
+\end{raggedleft}
+
+\vspace{5.5cm}
+
+% ------------------------------------------------------------------------------
+% 6. THỜI GIAN HOÀN THÀNH
+% ------------------------------------------------------------------------------
+{\fontsize{14pt}{\baselineskip}\selectfont \bfseries TP. HỒ CHÍ MINH, THÁNG 10 NĂM 2026 \par}
+
+\end{titlepage}
