@@ -1,0 +1,36 @@
+# Repo con đồng bộ với Overleaf: chỉ giữ source LaTeX (.tex, .sty, .bib) và hình ảnh.
+# Overleaf tự biên dịch, nên không đưa file trung gian và PDF lên.
+
+# LaTeX — file trung gian (latexmk / pdflatex / bibtex)
+*.aux
+*.bbl
+*.blg
+*.fdb_latexmk
+*.fls
+*.lof
+*.lot
+*.log
+*.out
+*.toc
+*.synctex.gz
+*.synctex(busy)
+*.nav
+*.snm
+*.xdv
+*.bcf
+*.run.xml
+
+# PDF biên dịch trên máy
+# main.pdf
+
+# Hệ điều hành / editor
+.DS_Store
+Thumbs.db
+desktop.ini
+.vscode/
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
