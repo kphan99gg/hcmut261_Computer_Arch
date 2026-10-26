@@ -16,7 +16,7 @@
 
 % ==============================================================================
 \section{Bộ dịch 32-bit}
-\label{sec:m1-32b_comp}
+\label{sec:m1-32b_shift}
 
 % ==============================================================================
 \section{Khối logic và số học - ALU}
@@ -28,6 +28,72 @@
 
 \subsection{Đặc tả thiết kế}
 \label{subsec:m1-reg_file_spec}
+Khối thanh ghi (register file) là khối lưu trữ dữ liệu tạm thời, được sử dụng để cung cấp các toán hạng và lưu trữ kết quả xử lý trong bộ vi xử lý RISC-V.
+Trong kiến trúc RISV-V, khối sẽ chứa tổng cộng 32 thanh ghi từ x0 đến x31 nhằm cân bằng giữa hiệu năng xử lý, độ phức tạp phần cứng và khả năng mã hóa lệnh \cite{riscv_isa_manual}. 
+Bên cạnh đó, mỗi thanh ghi có độ rộng 32-bit theo yêu cầu thiết kế.
+
+Chức năng chính của khối thanh ghi gồm:
+\begin{itemize}
+    \item \textbf{Đọc dữ liệu}: Hai đầu ra 32-bit, cho phép xuất dữ liệu độc lập từ địa chỉ thanh ghi mà không phụ thuộc xung clock.
+    \item \textbf{Ghi dữ liệu}: Dữ liệu 32-bit được ghi vào thanh ghi đích tại cạnh lên của xung clock với điều kiện tín hiệu cho phép ghi được kích hoạt.
+    \item \textbf{Đặt lại giá trị (reset)}: Đưa giá trị của tất cả các thanh ghi về giá trị 0 khi tín hiệu reset ở mức thấp và không phụ thuộc xung clock.
+    \item \textbf{Thanh ghi x0}: Thanh ghi luôn có giá trị bằng 0, dù có ghi vào giá trị khác.
+\end{itemize}
+
+\subsubsection{Tín hiệu vào, ra}
+\label{subsubsec:m1-reg_file_in_out}
+Các tín hiệu vào, ra của khối thanh ghi được mô tả như bảng \ref{tab:register_file_signals} dưới đây:
+\begin{table}[H]
+  \centering
+  \caption{Mô tả danh sách các tín hiệu của khối thanh ghi}
+  \label{tab:register_file_signals}
+  \begin{tabularx}{\textwidth}{l c c X}
+    \toprule
+    \textbf{Tín hiệu} & \textbf{Độ rộng (bit)} & \textbf{Hướng} & \textbf{Chức năng} \\
+    \midrule
+    \texttt{i\_clk}       & 1  & Input  & Tín hiệu clock điều khiển cổng ghi. \\[3pt]
+    \texttt{i\_rstn}      & 1  & Input  & Reset bất đồng bộ, tác động mức thấp. \\[3pt]
+    \texttt{i\_rs1\_addr} & 5  & Input  & Địa chỉ thanh ghi cần đọc tại cổng đọc thứ nhất. \\[3pt]
+    \texttt{i\_rs2\_addr} & 5  & Input  & Địa chỉ thanh ghi cần đọc tại cổng đọc thứ hai. \\[3pt]
+    \texttt{i\_rd\_addr}  & 5  & Input  & Địa chỉ thanh ghi đích cần ghi dữ liệu. \\[3pt]
+    \texttt{i\_rd\_data}  & 32 & Input  & Dữ liệu cần ghi vào thanh ghi đích. \\[3pt]
+    \texttt{i\_rd\_wren}  & 1  & Input  & Tín hiệu cho phép ghi dữ liệu. \\[3pt]
+    \texttt{o\_rs1\_data} & 32 & Output & Dữ liệu đọc từ thanh ghi được chọn bởi \texttt{i\_rs1\_addr}. \\[3pt]
+    \texttt{o\_rs2\_data} & 32 & Output & Dữ liệu đọc từ thanh ghi được chọn bởi \texttt{i\_rs2\_addr}. \\
+    \bottomrule
+  \end{tabularx}
+\end{table}
+
+
+\subsubsection{Đọc dữ liệu}
+\label{subsubsec:m1-reg_file_read}
+Register file có hai cổng đọc dữ liệu bất đồng bộ, không phụ thuộc xung \texttt{i\_clk}.
+Dữ liệu đầu ra được xác định bởi: 
+\begin{gather*}
+    \texttt{o\_rs1\_data[i] = \texttt{i\_rs1\_addr[i]}}\\
+    \texttt{o\_rs2\_data[i] = \texttt{i\_rs2\_addr[i]}}
+\end{gather*}
+
+Dữ liệu đầu ra được cập nhật liên tục theo tín hiệu đầu vào. Hơn nữa, hai đầu ra có thể truy xuất trên cùng một giá trị thanh ghi trên một thời điểm.
+\subsubsection{Ghi dữ liệu}
+\label{subsubsec:m1-reg_file_write}
+Register file có một cổng ghi đồng bộ, được điều khiển bởi tín hiệu \texttt{i\_clk} và \texttt{i\_rd\_wren}.
+Tại cạnh lên của xung \texttt{i\_clk}, nếu \texttt{i\_rd\_wren = 1} và địa chỉ đích \texttt{i\_rd\_addr} khác 0, dữ liệu tại \texttt{i\_rd\_data} được ghi vào thanh ghi tương ứng.
+
+Khi $\texttt{i\_rd\_wren} = 0$, toàn bộ thanh ghi giữ nguyên giá trị hiện tại. Nếu $\texttt{i\_rd\_addr} = 0$, việc ghi bị bỏ qua.
+
+\subsubsection{Đặt lại giá trị}
+\label{subsubsec:m1-reg_file_reset}
+Sử dụng tín hiệu đầu vào \texttt{i\_rstn} tích cực mức thấp.
+
+Khi \texttt{i\_rstn = 0}, toàn bộ các giá trị thanh ghi được đưa về giá trị $32h00000000$ mà không phụ thuộc cạnh clock.
+
+Khi \texttt{i\_rstn = 1}, Register File hoạt động bình thường theo chức năng đọc và ghi đã mô tả.
+
+\subsubsection{Thanh ghi x0}
+\label{subsubsec:m1-reg_file_x0}
+Theo quy tắc của kiến trúc tập lệnh RISV-V, thanh ghi $x0$ luôn có giá trị cố định là $32h00000000$. 
+Mọi thao tác ghi vào $x0$ đều bị bỏ qua giúp đảm bảo giá trị này không thay đổi trong quá trình hoạt động.
 
 \subsection{Kiến trúc khối thanh ghi}
 \label{subsec:m1-reg_file_arch}

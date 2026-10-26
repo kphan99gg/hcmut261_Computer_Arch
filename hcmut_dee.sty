@@ -26,6 +26,7 @@
 \RequirePackage{titlesec}               % Định dạng tiêu đề chương mục
 \RequirePackage{indentfirst}            % Thụt đầu dòng đoạn văn đầu tiên
 \RequirePackage{hyperref}               % Liên kết trang & Bookmark PDF
+\RequirePackage{enumitem}
 \RequirePackage{scrextend}
 \changefontsizes{13pt} % Ép cỡ chữ chuẩn toàn bài về 13pt
 
@@ -47,6 +48,19 @@
 
 % Cấu hình giãn dòng: 1.3 đối với Tiếng Việt theo quy định
 \setstretch{1.3}
+
+% ------------------------------------------------------------------------------
+% CẤU HÌNH KHOẢNG CÁCH DANH SÁCH (ENUMITEM)
+% ------------------------------------------------------------------------------
+\RequirePackage{enumitem}
+
+% Tự động áp dụng cho tất cả môi trường itemize, enumerate, description
+\setlist{
+  nolistsep,            % Triệt tiêu toàn bộ khoảng đệm dọc thừa (topsep, parsep, partopsep, itemsep)
+  itemsep=0pt,          % Khoảng cách giữa các gạch đầu dòng bằng 0pt (tuân theo giãn dòng 1.3 chuẩn)
+  topsep=3pt,           % Khoảng cách phía trên và phía dưới toàn bộ khối danh sách
+  leftmargin=1.5em      % Độ thụt lề trái cho dấu gạch đầu dòng
+}
 
 % Thụt đầu dòng 5 khoảng trắng (~7.5mm)
 \setlength{\parindent}{7.5mm}
